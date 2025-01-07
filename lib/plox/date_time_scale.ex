@@ -66,11 +66,13 @@ defmodule Plox.DateTimeScale do
         end)
       end
 
-      total_seconds = date_time_module.diff(scale.last, scale.first)
+      first_value = Map.get(opts, :start, scale.first)
+
+      total_seconds = date_time_module.diff(scale.last, first_value)
       ticks = trunc(total_seconds / step_seconds)
 
       0..ticks
-      |> Enum.map_reduce(scale.first, fn _i, acc ->
+      |> Enum.map_reduce(first_value, fn _i, acc ->
         {acc, date_time_module.add(acc, step_seconds)}
       end)
       |> elem(0)
